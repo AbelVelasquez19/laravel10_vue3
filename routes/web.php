@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AppointmentController;
 use App\Http\Controllers\admin\AppointmentStatusController;
+use App\Http\Controllers\admin\ClientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,6 +32,8 @@ Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
 Route::delete('/api/users', [UserController::class, 'bulkDelete']);
+
+Route::get('/api/clients', [ClientController::class, 'index']);
 
 Route::get('/api/appointments-status', [AppointmentStatusController::class, 'getStatusWithCount']);
 Route::get('/api/appointments', [AppointmentController::class, 'index']);

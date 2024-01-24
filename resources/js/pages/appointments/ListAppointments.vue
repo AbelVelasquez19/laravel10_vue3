@@ -70,7 +70,12 @@
                                 <span class="badge badge-pill badge-info">{{ appointmentCount }}</span>
                             </button>
 
-                            <button v-for="status in appointmentStatus" @click="getAppointments(status.value)" type="button" class="btn" :class="selectStatus === status.value ? 'btn-secondary': 'btn-default'">
+                            <button v-for="(status, index) in appointmentStatus"
+                                    :key="index"
+                                    @click="getAppointments(status.value)" 
+                                    type="button" 
+                                    class="btn" 
+                                    :class=" selectStatus === status.value ? 'btn-secondary': 'btn-default' ">
                                 <span class="mr-1">{{ status.name }}</span> 
                                 <span class="badge badge-pill" :class="`badge-${status.color}`">{{ status.count }}</span>
                             </button>
