@@ -1,5 +1,6 @@
 <script setup>
     import {onMounted, ref,computed} from 'vue';
+    import Swal from 'sweetalert2'
 
     //const appointmentStatus = {'scheduled':1,'confirmed':2,'cancelled':3};
     const appointmentStatus = ref([]);
@@ -24,6 +25,30 @@
        .then((response) => {
             appointments.value = response.data;
        })
+    }
+
+    const deleteAppointment = (id) => {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/api/appointments/${id}`)
+                    .then((response) => {
+                    appointments.value.data = appointments.value.data.filter(appointment => appointment.id !== id);
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                })
+            }
+        });
     }
 
     onMounted(() => {
@@ -104,11 +129,11 @@
                                             <span class="badge" :class="`badge-${appointment.status.color}`">{{ appointment.status.name }}</span>
                                         </td>
                                         <td>
-                                            <a href="">
+                                            <router-link :to="`/admin/appointments/${appointment.id}/edit`">
                                                 <i class="fa fa-edit mr-2"></i>
-                                            </a>
+                                            </router-link>
 
-                                            <a href="">
+                                            <a href="#" @click.prevent="deleteAppointment(appointment.id)">
                                                 <i class="fa fa-trash text-danger"></i>
                                             </a>
                                         </td>

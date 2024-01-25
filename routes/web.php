@@ -27,7 +27,6 @@ Route::get('/', function () {
 
 Route::get('/api/users', [UserController::class, 'index']);
 Route::post('/api/users', [UserController::class, 'store']);
-Route::get('/api/users/search', [UserController::class, 'search']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
@@ -38,6 +37,9 @@ Route::get('/api/clients', [ClientController::class, 'index']);
 Route::get('/api/appointments-status', [AppointmentStatusController::class, 'getStatusWithCount']);
 Route::get('/api/appointments', [AppointmentController::class, 'index']);
 Route::post('/api/appointments/create', [AppointmentController::class, 'store']);
+Route::get('/api/appointments/{appointment}/edit', [AppointmentController::class, 'edit']);
+Route::put('/api/appointments/{appointment}/edit', [AppointmentController::class, 'update']);
+Route::DELETE('/api/appointments/{appointment}', [AppointmentController::class, 'destroy']);
 
 
 Route::get('{view}', ApplicationController::class)->where('view','(.*)');

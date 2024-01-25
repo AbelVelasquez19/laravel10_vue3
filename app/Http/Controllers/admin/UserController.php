@@ -8,7 +8,12 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::latest()->paginate(3);
+        $users = User::query()
+        ->when(request('query'), function($query, $searchQuery){
+            $query->where('name','like', "%{$searchQuery}%");
+        })
+        ->latest()
+        ->paginate(3);
         return $users;
     }
 

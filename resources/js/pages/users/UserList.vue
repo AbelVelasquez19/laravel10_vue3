@@ -20,7 +20,11 @@ const selectAll = ref(false);
 const emit = defineEmits(['userDeleted']);
 
 const  getUsers = async(page = 1) => {
-    await axios.get(`/api/users?page=${page}`)
+    await axios.get(`/api/users?page=${page}`,{
+        params:{
+            query:searchQuery.value
+        }
+    })
     .then((response) => {
         users.value = response.data;
         selectedUsers.value=[];
@@ -99,19 +103,6 @@ const handlerSubmit = (values, actions) => {
 }
 
 
-const search = async() => {
-    await axios.get('/api/users/search',{
-        params:{
-            query:searchQuery.value
-        }
-    })
-    .then((response) => {
-        users.value = response.data;
-    })
-    .catch(error => {
-        console.log(error);
-    })
-}
 
 const toggleSelection = (user) => {
     const index = selectedUsers.value.indexOf(user.id);
@@ -171,7 +162,7 @@ watch(formValues, (newValues) => {
 });
 
 watch(searchQuery, debounce(()=>{
-    search();
+    getUsers();
 },300))
 
 onMounted(() => {

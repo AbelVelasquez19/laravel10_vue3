@@ -16,8 +16,28 @@ const form = reactive({
     end_time:'',
     description:'',
 });
+const editMode = ref(false);
 
 const handleSubmit = async(values, actions)=>{
+    if(editMode.value){
+        editAppointment(values, actions);
+    }else{
+        createAppointment(values, actions);
+    }
+}
+
+const editAppointment = (values, actions) => {
+    axios.put(`/api/appointments/${route.params.id}/edit`, form)
+        .then((response) => {
+          router.push('/admin/appointments');
+          toastr.success('Cita actualizado correctamente!');
+    })
+    .catch((error)=>{
+        actions.setErrors(error.response.data.errors)
+    })
+}
+
+const createAppointment = (values, actions) => {
     axios.post('/api/appointments/create', form)
         .then((response) => {
           router.push('/admin/appointments');
@@ -38,12 +58,15 @@ const getClients = () => {
 
 const getAppointment = () => {
     axios.get(`/api/appointments/${route.params.id}/edit`)
-        .then((response) => {
-            form.title = response.data.title
+        .then(({data}) => {
+            form.title = data.title;
+            form.client_id = data.client_id;
+            form.start_time = data.formatted_start_time;
+            form.end_time = data.formatted_end_time;
+            form.description = data.description;
     })
 };
 
-const editMode = ref(false);
 
 onMounted(()=>{
     if(route.name ==='admin.appointments.edit'){
