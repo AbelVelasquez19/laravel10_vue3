@@ -69,7 +69,6 @@ const addUser = () => {
 
 const editUser = (user) => {
     editing.value = true;
-    console.log(user.id)
     form.value.resetForm();
     $('#createUserModal').modal('show');
     formValues.value = {
@@ -82,6 +81,7 @@ const editUser = (user) => {
 const updateUser = async (values,{setErrors}) => {
     await axios.put('/api/users/'+values.id, values)
         .then((response) => {
+            console.log(response)
             const index = users.value.findIndex(user => user.id === response.data.id);
             users.value[index] = response.data;
             $('#createUserModal').modal('hide');
@@ -94,7 +94,6 @@ const updateUser = async (values,{setErrors}) => {
 }
 
 const handlerSubmit = (values, actions) => {
-    console.log(actions)
     if(editing.value){
         updateUser(values, actions);
     }else{
